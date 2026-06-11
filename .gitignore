@@ -1,0 +1,43 @@
+# Obsidian
+.obsidian/
+.trash/
+
+# Alcove search index (generated)
+.alcove/
+
+# Environment and secrets
+.env
+.env.*
+
+# Generated caches
+.fastembed_cache/
+.ruff_cache/
+.smart-env/
+.playwright-mcp/
+__pycache__/
+
+# obsidian-forge generated
+logs/
+temp_conversions/
+Untitled*
+
+# Platform files
+.DS_Store
+*.local.json
+*.ir.json
+*.db
+
+# IDE
+.idea/
+.vscode/
+.history/
+
+# Rust
+target/
+Cargo.lock
+
+# Node
+node_modules/
+
+# Symlinks (user-specific)
+obsidian-templates

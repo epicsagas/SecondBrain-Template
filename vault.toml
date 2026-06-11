@@ -1,0 +1,60 @@
+# Karpathy 3-Layer Architecture
+# Raw:   {project dirs at root}, 00-Inbox/, 02-Areas/
+# Wiki:  10-Zettelkasten/ (layer/wiki tagged)
+# Graph: wikilinks (auto-strengthened by obsidian-forge)
+#
+# vault.toml — settings for THIS vault only
+#
+# ── Always vault-specific (edit freely) ──────────────────────────────────
+#   [vault]     Display name and folder layout (inbox, PARA paths, templates, ...).
+#
+# ── Per-vault overrides (uncomment to differ from global config.toml) ─────
+#   [projects]  Exclude specific top-level dirs from MOC/graph scanning.
+#   [graph]     Graph strengthening toggles and custom concepts for this vault.
+#   [sync]      Git auto commit/push and sync interval for this vault.
+#   [ai]        Override model or concurrency for AI operations in this vault.
+#               (provider / base_url / api_key are global — set in config.toml)
+#
+# ── Global-only (manage in ~/.obsidian-forge/config.toml) ──────────
+#   [daemon]    Single watch/sync process for all vaults; not meaningful per-vault.
+#   [ai]        provider, base_url, api_key — shared AI backend.
+#
+
+[vault]
+name = "{{VAULT_NAME}}"
+layout = "para"
+inbox_dir = "00-Inbox"
+zettelkasten_dir = "10-Zettelkasten"
+archive_dir = "99-Archives"
+attachments_dir = "Attachments"
+templates_dir = "obsidian-templates"
+system_dirs = ["_template", "Attachments", "Chats", "Clippings", "Excalidraw", "logs"]
+
+# ── Per-vault overrides ───────────────────────────────────────────────────
+
+[projects]
+exclude = ["_template", "Attachments", "Chats", "Clippings", "Excalidraw", "logs"]
+
+[graph]
+backlinks = true
+bridge_notes = true
+auto_tags = true
+related_projects = true
+concepts = [
+  # Add your domain concepts here.
+  # Each entry: { name = "Display Name", keywords = ["keyword1", "keyword2"], tags = ["tag"] }
+  #
+  # Examples:
+  # { name = "Machine Learning", keywords = ["ml", "machine learning", "neural network"], tags = ["ml"] },
+  # { name = "Rust", keywords = ["rust", "cargo", "systems programming"], tags = ["rust"] },
+  # { name = "AI Agent", keywords = ["agent", "ai agent", "mcp server"], tags = ["ai-agent"] },
+]
+
+[sync]
+git_auto_commit = true
+git_auto_push = false
+interval_minutes = 60
+
+[ai]
+model = "claude-sonnet-4-20250514"
+max_concurrent = 5

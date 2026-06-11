@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kordoc": {
+      "command": "npx",
+      "args": ["-y", "kordoc-mcp@latest"]
+    }
+  }
+}
