@@ -26,6 +26,9 @@ rm -f "$SCRIPT_DIR/Home.md.bak"
 
 echo "==> Creating cross-tool symlinks..."
 
+# Ensure .claude/ directory exists (may not if settings.json is missing)
+mkdir -p "$SCRIPT_DIR/.claude"
+
 # Claude Code: .claude/skills/ and .claude/agents/ → .agents/
 # Remove existing directories if present (from template), then symlink
 if [ -d "$SCRIPT_DIR/.claude/skills" ] && [ ! -L "$SCRIPT_DIR/.claude/skills" ]; then

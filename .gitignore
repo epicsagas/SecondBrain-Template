@@ -23,9 +23,11 @@ Untitled*
 
 # Platform files
 .DS_Store
-*.local.json
 *.ir.json
 *.db
+
+# Claude Code user-local settings (keep shared settings.json in git)
+.claude/settings.local.json
 
 # IDE
 .idea/
