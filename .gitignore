@@ -39,5 +39,11 @@ Cargo.lock
 # Node
 node_modules/
 
-# Symlinks (user-specific)
+# Symlinks (created by setup.sh — not committed)
+# These are created at setup time from .agents/ source of truth
+.claude/skills
+.claude/agents
+.claude/rules
+
+# User-specific
 obsidian-templates

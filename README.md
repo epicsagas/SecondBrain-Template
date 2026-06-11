@@ -2,15 +2,15 @@
 
 > LLM-agent-powered Obsidian vault. Clone and start thinking.
 
-A pre-configured Obsidian vault that uses Claude Code agents to automate knowledge management. Based on the **Karpathy 3-Layer Architecture** (Raw → Wiki → Graph) and **PARA** folder structure.
+A pre-configured Obsidian vault that uses AI coding agents to automate knowledge management. Based on the **Karpathy 3-Layer Architecture** (Raw → Wiki → Graph) and **PARA** folder structure. Works with **Claude Code, Codex, Cursor, and Antigravity**.
 
 ## What You Get
 
 - **Karpathy 3-Layer** knowledge architecture (Raw → Wiki → Graph)
 - **PARA** folder structure with agent navigation
-- **2 Claude Code skills** — vault-doctor (diagnostics), skill-forge (create new skills)
-- **2 slash commands** — `/vault-fix`, `/vault-scan`
+- **2 Agent Skills** — vault-doctor (diagnostics), skill-forge (create new skills)
 - **1 agent persona** — vault-specialist
+- **Cross-tool compatibility** — `.agents/` works across Claude Code, Codex, Cursor, Antigravity
 - **Project document templates** — PRD, ARCHITECTURE, DECISIONS, etc.
 - **Tag and frontmatter** enforcement rules
 
@@ -54,7 +54,10 @@ chmod +x setup.sh
 ./setup.sh "MySecondBrain"
 ```
 
-This replaces `{{VAULT_NAME}}` placeholders in `vault.toml`, `index.md`, and `Home.md`.
+This:
+- Replaces `{{VAULT_NAME}}` placeholders
+- Creates cross-tool symlinks (`.claude/` → `.agents/`)
+- Initializes git
 
 ### 3. Install Prerequisites
 
@@ -65,60 +68,72 @@ This replaces `{{VAULT_NAME}}` placeholders in `vault.toml`, `index.md`, and `Ho
 | [vault-doctor](https://github.com/epicsagas/vault-doctor) | `npm install -g vault-doctor` | Vault health diagnostics |
 | [Obsidian](https://obsidian.md) | Download from obsidian.md | Note-taking app |
 
-**Recommended Claude Code plugins** (install via `claude plugin install <name>`):
-
-| Plugin | Purpose |
-|--------|---------|
-| `alcove` | MCP-based project doc server |
-| `obsidian-forge` | Obsidian vault management CLI |
-| `epic` | Development pipeline (spec/go/check/ship) |
-| `epicsagas` | Decision-making skills (five-whys, devil's advocate) |
-
-Add the epicsagas marketplace first:
-```bash
-claude plugin marketplace add epicsagas
-```
-
 ### 4. Open in Obsidian
 
 Open the cloned folder as a vault in Obsidian. Install the [Dataview](https://blacksmithgu.github.io/obsidian-dataview/) community plugin for `Home.md` queries.
 
-### 5. Start Claude Code
+### 5. Start Your Agent
 
 ```bash
-cd my-second-brain
-claude
+# Any of these works:
+claude          # Claude Code
+codex           # OpenAI Codex
+agy             # Antigravity
+# Or open in Cursor IDE
 ```
 
 ## Folder Structure
 
 ```
-├── 00-Inbox/               # Capture zone
-├── 01-Projects/            # Active projects
-├── 02-Areas/               # Ongoing interest areas
-├── 03-Resources/           # Reference materials
-├── 04-Writing/             # Writing projects
-├── 10-Zettelkasten/        # Permanent concept notes (Wiki layer)
-├── 99-Archives/projects/   # All project docs (active + inactive)
-├── _template/              # New project scaffolding
-├── scripts/                # Automation scripts
-├── AGENTS.md               # Agent instructions (read by Claude Code)
-├── CLAUDE.md               # Entry point → delegates to AGENTS.md
-├── TAGGING.md              # Tag and frontmatter rules
-├── vault.toml              # obsidian-forge configuration
-├── index.md                # Agent navigation (static, no Dataview)
-└── Home.md                 # Obsidian dashboard (Dataview queries)
+├── .agents/                    # Agent infrastructure (source of truth)
+│   ├── skills/                 #   SKILL.md files (Agent Skills Open Standard)
+│   ├── agents/                 #   Agent personas (YAML frontmatter + Markdown)
+│   └── rules/                  #   Vault conventions
+├── .claude/                    # Claude Code config (symlinks to .agents/)
+│   └── settings.local.json     #   Permissions
+├── .codex/                     # Codex-specific config
+│   └── agents/                 #   Agent definitions (TOML format)
+├── 00-Inbox/                   # Capture zone
+├── 01-Projects/                # Active projects
+├── 02-Areas/                   # Ongoing interest areas
+├── 03-Resources/               # Reference materials
+├── 04-Writing/                 # Writing projects
+├── 10-Zettelkasten/            # Permanent concept notes (Wiki layer)
+├── 99-Archives/projects/       # All project docs (active + inactive)
+├── _template/                  # New project scaffolding
+├── scripts/                    # Automation scripts
+├── AGENTS.md                   # Agent instructions (read by all tools)
+├── CLAUDE.md                   # Entry point → delegates to AGENTS.md
+├── TAGGING.md                  # Tag and frontmatter rules
+├── vault.toml                  # obsidian-forge configuration
+├── index.md                    # Agent navigation (static, no Dataview)
+└── Home.md                     # Obsidian dashboard (Dataview queries)
 ```
 
-## Included Skills & Commands
+## Cross-Tool Compatibility
 
-| Type | Name | Trigger |
-|------|------|---------|
-| Skill | vault-doctor | "scan vault", "fix vault", "check vault health" |
-| Skill | skill-forge | "skill create", "skill audit", "make skill" |
-| Command | `/vault-fix` | Run vault-doctor auto-fix + verify |
-| Command | `/vault-scan` | Run vault-doctor scan + report |
-| Agent | vault-specialist | Automated vault health workflows |
+All agent infrastructure lives in `.agents/`. `setup.sh` creates symlinks so each tool discovers it:
+
+| Tool | How it finds skills | How it finds agents |
+|------|--------------------|--------------------|
+| **Claude Code** | `.claude/skills/` → symlink → `.agents/skills/` | `.claude/agents/` → symlink → `.agents/agents/` |
+| **OpenAI Codex** | `.claude/skills/` (reads natively) | `.codex/agents/` (TOML format) |
+| **Cursor** | reads `.claude/skills/` natively | reads `.claude/agents/` natively |
+| **Antigravity** | reads `.agents/skills/` natively | (not yet supported) |
+
+### Why `.agents/`?
+
+`.agents/` is the [Agent Skills Open Standard](https://agentskills.io) location. It's the only path that all four tools can agree on:
+- Antigravity reads it natively
+- Claude Code, Codex, Cursor read it via symlinks
+
+## Included Skills
+
+| Skill | Trigger | Description |
+|-------|---------|-------------|
+| vault-doctor | "scan vault", "fix vault", `/vault-scan`, `/vault-fix` | Diagnostics and auto-fix |
+| skill-forge | "skill create", "skill audit", `/skill-forge` | Create and optimize skills |
+| vault-specialist | (agent persona) | Full vault health workflows |
 
 ## Customization
 
@@ -139,7 +154,7 @@ claude
 > /skill-forge create
 ```
 
-Follow the interactive prompt. Skills are saved to `.claude/skills/`.
+Skills are saved to `.agents/skills/` and automatically available to all tools via symlinks.
 
 ### Change Language
 
@@ -151,13 +166,13 @@ Edit `vault.toml` → `[ai]` section:
 
 ```toml
 [ai]
-model = "claude-sonnet-4-20250514"  # or "gpt-4o", "glm-5", etc.
+model = "claude-sonnet-4-20250514"
 max_concurrent = 5
 ```
 
 ## Creating a New Project
 
-When starting a new project, copy `_template/` to `99-Archives/projects/{name}/`:
+Copy `_template/` to `99-Archives/projects/{name}/`:
 
 ```bash
 cp -r _template/ 99-Archives/projects/my-project/
@@ -168,8 +183,6 @@ cd 99-Archives/projects/my-project
 Or use obsidian-forge: `of init-project my-project`
 
 ## Methodology References
-
-This vault combines three knowledge management approaches:
 
 | Method | Role in Vault | Layer |
 |--------|--------------|-------|

@@ -1,11 +1,11 @@
 ---
 name: skill-forge
-description: "Claude Code skill creator and optimizer. Triggers on skill create, make skill, skill forge, new skill, skill audit, skill optimize, SKILL.md. Generates production-grade SKILL.md with proper frontmatter, multi-phase workflows, MCP integration, and 2026 best practices."
+description: "Skill creator and optimizer following Agent Skills Open Standard. Triggers on skill create, make skill, skill forge, new skill, skill audit, skill optimize, SKILL.md."
 ---
 
 # Skill Forge
 
-Meta-skill for creating and optimizing Claude Code skills. Generates production-grade SKILL.md files following the Agent Skills open standard (2026).
+Meta-skill for creating and optimizing Agent Skills. Generates production-grade SKILL.md files following the Agent Skills Open Standard.
 
 ## Trigger
 
@@ -30,19 +30,15 @@ Extract the following from user input. Use AskUserQuestion to fill gaps.
 | Skill name | What name? (lowercase + hyphens, max 64 chars) | Infer from input |
 | Purpose | What does this skill do? | — |
 | Triggers | When should it activate? | Infer from purpose |
-| Scope | Project-local vs global? | Project (`.claude/skills/`) |
+| Scope | Project-local vs global? | Project (`.agents/skills/`) |
 
 **Optional (advanced):**
 
 | Field | Description | Default |
 |-------|-------------|---------|
 | `allowed-tools` | Restrict which tools the skill can use | Unset (all allowed) |
-| `context` | `fork` to run in isolated subagent | Unset (inline) |
-| `agent` | Subagent type when `context: fork` | Unset |
 | `model` | Override model when skill activates | Unset |
-| `argument-hint` | Autocomplete hint for `/command` | Unset |
-| `disable-model-invocation` | Prevent automatic Claude invocation | false |
-| `user-invocable` | Hide from slash menu | true |
+| `disable-model-invocation` | Prevent automatic invocation | false |
 
 ---
 
@@ -122,7 +118,7 @@ description: {when to use + what it does}
 
 ### Phase 5: File Creation
 
-1. Write file to `.claude/skills/{skill-name}/SKILL.md`
+1. Write file to `.agents/skills/{skill-name}/SKILL.md`
 2. Create scripts/, references/ subfiles if needed
 
 ---
@@ -135,7 +131,7 @@ description: {when to use + what it does}
 
 ---
 
-## Best Practices (2026)
+## Best Practices
 
 ### Do
 - Keep body under 200 lines
@@ -146,5 +142,5 @@ description: {when to use + what it does}
 ### Don't
 - Make one skill do too much
 - Write vague descriptions
-- Put global rules in skills (belongs in CLAUDE.md)
+- Put global rules in skills (belongs in AGENTS.md)
 - Write 200+ line monolithic SKILL.md files

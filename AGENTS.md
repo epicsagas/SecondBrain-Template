@@ -108,19 +108,35 @@ Supporting folders: `reports/`, `specs/`, `plans/`, `research/`, `archive/`, `st
 2. Save newly discovered patterns/feedback to Memory
 3. Commit with Conventional Commits
 
-## Included Skills
+## Agent Infrastructure
 
-### Vault Management
-- `vault-doctor` — vault-doctor CLI diagnostics/repair
-- `vault-fix` / `vault-scan` — Slash commands for vault maintenance
+All agent infrastructure lives in `.agents/` (source of truth).
+`setup.sh` creates symlinks so each tool can discover it.
 
-### Development
+```
+.agents/
+├── skills/              # Agent Skills Open Standard (SKILL.md)
+│   ├── vault-doctor/    #   Vault diagnostics and auto-fix
+│   └── skill-forge/     #   Skill creation/optimization
+├── agents/              # Agent personas (YAML frontmatter + Markdown)
+│   └── vault-specialist #
+└── rules/               # Vault conventions and constraints
+    └── vault-conventions.md
+```
+
+| Tool | Discovery Path |
+|------|---------------|
+| **Claude Code** | `.claude/skills/` → `.agents/skills/` (symlink) |
+| **Codex** | `.claude/skills/` (shared) + `.codex/agents/` (TOML) |
+| **Cursor** | reads `.claude/` natively |
+| **Antigravity** | reads `.agents/` natively |
+
+### Included Skills
+- `vault-doctor` — CLI diagnostics/repair (includes `/vault-scan` and `/vault-fix` workflows)
 - `skill-forge` — Skill creation/optimization
 
 ### Plugin-provided Skills (install separately)
 - `obsidian-forge:*` — Graph strengthening, inbox processing, vault sync
-- `epic:*` — Development pipeline (spec/go/check/ship/evolve)
-- `epicsagas:*` — Decision-making (five-whys, devil's advocate, biz-risk)
 
 ## Document Authoring Rules
 
